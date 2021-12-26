@@ -153,6 +153,20 @@ class CGAGridViewController: UICollectionViewController {
 	override func collectionView(_ collectionView: UICollectionView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
 		return true
 	}
+    
+    // MARK: - Support for Select All (Cmd + A)
+    
+    override func selectAll(_ sender: Any?) {
+        for section in 0..<collectionView.numberOfSections {
+            for item in 0..<collectionView.numberOfItems(inSection: section) {
+                let indexPath = IndexPath(item: item, section: section)
+                
+                collectionView.selectItem(at: indexPath,
+                                          animated: true,
+                                          scrollPosition: [])
+            }
+        }
+    }
 	
 	// MARK: - Aspect Ratio
 	
