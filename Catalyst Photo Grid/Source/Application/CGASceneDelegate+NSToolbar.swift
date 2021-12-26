@@ -15,10 +15,6 @@ extension NSToolbarItem.Identifier {
 	static let switchAspect = NSToolbarItem.Identifier("com.example.switchAspect")
 }
 
-extension NSNotification.Name {
-	static let displayModeChanged = NSNotification.Name("DisplayModeChanged")
-}
-
 extension CGASceneDelegate: NSToolbarDelegate {
 	
 	func generateDynamicToolbarItems() {

@@ -7,7 +7,13 @@
 //
 
 import UIKit
+#if targetEnvironment(macCatalyst)
 import AppKit
+#endif
+
+extension NSNotification.Name {
+	static let displayModeChanged = NSNotification.Name("DisplayModeChanged")
+}
 
 class CGASceneDelegate: UIResponder, UIWindowSceneDelegate {
 	var window: UIWindow?
