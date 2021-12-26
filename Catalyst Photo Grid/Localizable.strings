@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  Catalyst Grid App
+
+  Created by Steven Troughton-Smith on 07/10/2021.
+  
+*/
+
+"SWITCH_ASPECT" = "Show thumbnails as square or in full aspect ratio";
