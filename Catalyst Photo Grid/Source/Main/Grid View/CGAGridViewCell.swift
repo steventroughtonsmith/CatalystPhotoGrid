@@ -114,7 +114,7 @@ class CGAGridViewCell: UICollectionViewCell {
 		super.traitCollectionDidChange(previousTraitCollection)
 		
 		/* CALayer color properties don't automatically update when Light/Dark mode changes */
-		contentView.layer.borderColor = UIColor.separator.cgColor
+		imageView.layer.borderColor = UIColor.separator.cgColor
 		focusRingView.layer.borderColor = UIColor.systemBlue.cgColor
 	}
 	
