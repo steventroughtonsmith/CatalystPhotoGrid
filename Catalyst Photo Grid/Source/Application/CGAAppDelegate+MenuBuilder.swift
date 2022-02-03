@@ -20,17 +20,5 @@ extension CGAAppDelegate {
 		builder.remove(menu: .format)
 		builder.remove(menu: .toolbar)
 		builder.remove(menu: .newScene)
-		
-		/* Add 'Back' option to View menu */
-		do {
-			let command = UIKeyCommand(input: "[", modifierFlags: [.command], action: NSSelectorFromString("goBack:"))
-			command.title = NSLocalizedString("MENU_VIEW_GO_BACK", comment: "")
-			command.discoverabilityTitle = NSLocalizedString("MENU_VIEW_GO_BACK", comment: "")
-			
-			let menu = UIMenu(identifier: UIMenu.Identifier("GoBack"), options: .displayInline, children: [command])
-			
-			builder.insertChild(menu, atStartOfMenu: .view)
-		}
 	}
-	
 }

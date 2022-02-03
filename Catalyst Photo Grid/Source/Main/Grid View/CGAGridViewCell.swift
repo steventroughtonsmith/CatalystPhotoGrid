@@ -11,10 +11,17 @@ import CoreGraphics
 class CGAGridViewCell: UICollectionViewCell {
 	
 	/*
-	 Custom subviews go here, add to the content view, then lay them out in layoutSubviews
+		Keyboard focus & cell selection are two different things, so conceptually it is
+		important to remember that they may not necessarily be linked. In this example,
+		we're using two different 'selection' styles to underscore that.
+	 
+		As of macOS 12.1, multi-select (drag-select) handles focus state incorrectly,
+		so as soon as that behavior is improved this distinction may not be necessary.
 	 */
 	
 	let focusRingView = UIView()
+	let selectionRingView = UIView()
+	
 	let imageView = UIImageView()
 	
 	var displayMode:CGAGridViewController.DisplayMode = .square {
@@ -23,9 +30,9 @@ class CGAGridViewCell: UICollectionViewCell {
 		}
 	}
 	
-	@objc var showHighlightRing:Bool = false {
+	@objc var showFocusRing:Bool = false {
 		didSet {
-			if showHighlightRing {
+			if showFocusRing {
 				focusRingView.alpha = 1
 			}
 			else {
@@ -34,9 +41,20 @@ class CGAGridViewCell: UICollectionViewCell {
 		}
 	}
 	
-	override var isSelected:Bool {
+	@objc var showSelectionRing:Bool = false {
 		didSet {
-			showHighlightRing = isSelected
+			if showSelectionRing {
+				selectionRingView.alpha = 1
+			}
+			else {
+				selectionRingView.alpha = 0
+			}
+		}
+	}
+	
+	override var isSelected: Bool {
+		didSet {
+			showSelectionRing = isSelected
 		}
 	}
 
@@ -55,14 +73,23 @@ class CGAGridViewCell: UICollectionViewCell {
 		
 		contentView.addSubview(imageView)
 		
-		// Focus Ring
+		/* Selection Ring */
+		
+		selectionRingView.alpha = 0
+		
+		selectionRingView.layer.cornerRadius = UIFloat(8)
+		selectionRingView.layer.borderWidth = UIFloat(4)
+		selectionRingView.layer.borderColor = UIColor.white.withAlphaComponent(0.7).cgColor
+		
+		imageView.addSubview(selectionRingView)
+		
+		/* Focus Ring */
 		
 		focusRingView.alpha = 0
 		
 		focusRingView.layer.cornerRadius = UIFloat(8)
 		focusRingView.layer.borderWidth = UIFloat(4)
 		focusRingView.layer.borderColor = UIColor.systemBlue.cgColor
-		
 		
 		imageView.addSubview(focusRingView)
 		
@@ -85,14 +112,17 @@ class CGAGridViewCell: UICollectionViewCell {
 		if displayMode == .square {
 			imageView.layer.cornerRadius = 0
 			focusRingView.layer.cornerRadius = 0
-			
+			selectionRingView.layer.cornerRadius = 0
+
 			imageView.frame = contentBounds
 			focusRingView.frame = imageView.bounds
+			selectionRingView.frame = imageView.bounds
 		}
 		else {
 			imageView.layer.cornerRadius = UIFloat(8)
 			focusRingView.layer.cornerRadius = UIFloat(8)
-			
+			selectionRingView.layer.cornerRadius = UIFloat(8)
+
 			/*
 			 Here, the aspect ratio is hard-coded for this demo. But in a real app dealing with
 			 photos you might have this ratio stored or calculated in your data model
@@ -105,6 +135,7 @@ class CGAGridViewCell: UICollectionViewCell {
 			
 			imageView.frame = CGRect(x: (contentBounds.width-desiredWidth)/2, y: (contentBounds.height-desiredHeight)/2, width: desiredWidth, height: desiredHeight)
 			focusRingView.frame = imageView.bounds
+			selectionRingView.frame = imageView.bounds
 		}
 	}
 	
@@ -116,6 +147,7 @@ class CGAGridViewCell: UICollectionViewCell {
 		/* CALayer color properties don't automatically update when Light/Dark mode changes */
 		imageView.layer.borderColor = UIColor.separator.cgColor
 		focusRingView.layer.borderColor = UIColor.systemBlue.cgColor
+		selectionRingView.layer.borderColor = UIColor.white.withAlphaComponent(0.7).cgColor
 	}
 	
 	// MARK: - Focus Support
@@ -126,7 +158,10 @@ class CGAGridViewCell: UICollectionViewCell {
 		
 		// customize the border of the cell instead of putting a focus ring on top of it.
 		if context.nextFocusedItem === self {
-			showHighlightRing = true
+			showFocusRing = true
+		}
+		else if context.previouslyFocusedItem === self {
+			showFocusRing = false
 		}
 	}
 }
