@@ -164,4 +164,14 @@ class CGAGridViewCell: UICollectionViewCell {
 			showFocusRing = false
 		}
 	}
+	
+	// MARK: - Selection Area
+	
+	override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+		/*
+		 Change the hit region of the cell to use the image view's frame.
+		 Clicking in the empty space between images will deselect the cell
+		 */
+		return imageView.frame.contains(point)
+	}
 }
